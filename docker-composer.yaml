@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - PORT=8000
+      - WORKERS=4
+      - API_AUTH_TOKEN=${API_AUTH_TOKEN}
+      - LINKEDIN_LI_AT=${LINKEDIN_LI_AT}
+      - LINKEDIN_JSESSIONID=${LINKEDIN_JSESSIONID}
+      - PROXY_DSN=${PROXY_DSN}
+      - MAX_CONCURRENT_REQUESTS=30
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
